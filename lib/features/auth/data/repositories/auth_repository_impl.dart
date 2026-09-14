@@ -1,18 +1,41 @@
-import '../data_sources/auth_remote_data_source.dart';
-
-abstract class AuthRepository {
-  Future<void> sendPasswordResetEmail(String email);
-
-}
+import 'package:movies/features/auth/data/data_sources/auth_remote_data_source.dart';
+import 'package:movies/features/auth/data/repositories/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
+  AuthRepositoryImpl(this._remoteDataSource);
+
   final AuthRemoteDataSource _remoteDataSource;
 
-  AuthRepositoryImpl(this._remoteDataSource);
+  @override
+  Future<void> login(String email, String password) {
+    return _remoteDataSource.login(email, password);
+  }
+
+  @override
+  Future<void> signInWithGoogle() {
+    return _remoteDataSource.signInWithGoogle();
+  }
+
+  @override
+  Future<void> register({
+    required String name,
+    required String email,
+    required String password,
+  }) {
+    return _remoteDataSource.register(
+      name: name,
+      email: email,
+      password: password,
+    );
+  }
+
+  @override
+  Future<void> updateProfile({String? name}) {
+    return _remoteDataSource.updateProfile(name: name);
+  }
 
   @override
   Future<void> sendPasswordResetEmail(String email) {
-  
     return _remoteDataSource.sendPasswordResetEmail(email);
   }
 }
