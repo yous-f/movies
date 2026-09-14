@@ -33,4 +33,9 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<void> updateProfile({String? name}) {
     return _remoteDataSource.updateProfile(name: name);
   }
+
+  @override
+  Future<void> sendPasswordResetEmail(String email) {
+    return _remoteDataSource.sendPasswordResetEmail(email);
+  }
 }

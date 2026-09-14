@@ -56,6 +56,16 @@ class AuthRemoteDataSource {
     }
   }
 
+  Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e) {
+      throw _mapFirebaseAuthException(e);
+    } on Exception {
+      throw ApiException('Failed to send reset email');
+    }
+  }
+
   Future<void> signInWithGoogle() async {
     try {
       await _firebaseAuth.signInWithProvider(GoogleAuthProvider());
