@@ -8,10 +8,14 @@ import 'package:movies/features/home/presentation/screens/home_screen.dart';
 import 'package:movies/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+import 'firebase_options.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   runApp(const MoviesApp());
 }
