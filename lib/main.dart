@@ -6,7 +6,7 @@ import 'package:movies/features/auth/presentation/screens/forget_password_screen
 import 'package:movies/features/auth/presentation/screens/login_screen.dart';
 import 'package:movies/features/auth/presentation/screens/register_screen.dart';
 import 'package:movies/features/home/presentation/screens/home_screen.dart';
-import 'package:movies/features/onboarding/presentation/screens/onboarding_screen.dart';
+import 'package0/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:movies/features/profile/presentation/screens/update_profile_screen.dart';
 
 import 'firebase_options.dart';
@@ -14,9 +14,11 @@ import 'firebase_options.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
-  runApp(MoviesApp());
+  runApp(const MoviesApp());
 }
 
 class MoviesApp extends StatelessWidget {

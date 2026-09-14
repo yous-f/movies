@@ -17,14 +17,20 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<void> register({required String name, required String email, required String password}) {
-    // TODO: implement register
-    throw UnimplementedError();
+  Future<void> register({
+    required String name,
+    required String email,
+    required String password,
+  }) {
+    return _remoteDataSource.register(
+      name: name,
+      email: email,
+      password: password,
+    );
   }
 
   @override
   Future<void> updateProfile({String? name}) {
-    // TODO: implement updateProfile
-    throw UnimplementedError();
+    return _remoteDataSource.updateProfile(name: name);
   }
 }
