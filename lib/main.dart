@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'package:movies/core/theme/app_theme.dart';
 import 'package:movies/features/auth/presentation/screens/forget_password_screen.dart';
 import 'package:movies/features/auth/presentation/screens/login_screen.dart';
 import 'package:movies/features/auth/presentation/screens/register_screen.dart';
 import 'package:movies/features/home/presentation/screens/home_screen.dart';
-import 'package:movies/features/onboarding/presentation/screens/onboarding_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package0/features/onboarding/presentation/screens/onboarding_screen.dart';
+import 'package:movies/features/profile/presentation/screens/update_profile_screen.dart';
 
 import 'firebase_options.dart';
 
@@ -35,11 +36,12 @@ class MoviesApp extends StatelessWidget {
         OnboardingScreen.routeName: (_) => const OnboardingScreen(),
         LoginScreen.routeName: (_) => const LoginScreen(),
         RegisterScreen.routeName: (_) => const RegisterScreen(),
+        UpdateProfileScreen.routeName: (_) => const UpdateProfileScreen(),
         ForgetPasswordScreen.routeName: (_) => const ForgetPasswordScreen(),
         HomeScreen.routeName: (_) => const HomeScreen(),
       },
 
-      initialRoute: OnboardingScreen.routeName,
+      initialRoute: HomeScreen.routeName,
     );
   }
 }

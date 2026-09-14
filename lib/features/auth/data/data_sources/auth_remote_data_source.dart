@@ -5,7 +5,7 @@ import 'package:movies/core/errors/network_exception.dart';
 
 class AuthRemoteDataSource {
   AuthRemoteDataSource({FirebaseAuth? firebaseAuth})
-    : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance;
+      : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance;
 
   final FirebaseAuth _firebaseAuth;
 
@@ -19,6 +19,40 @@ class AuthRemoteDataSource {
       throw _mapFirebaseAuthException(e);
     } on Exception {
       throw ApiException('Authentication failed');
+    }
+  }
+
+  Future<void> register({
+    required String name,
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final credential = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      await credential.user?.updateDisplayName(name);
+    } on FirebaseAuthException catch (e) {
+      throw _mapFirebaseAuthException(e);
+    } on Exception {
+      throw ApiException('Registration failed');
+    }
+  }
+
+  Future<void> updateProfile({String? name}) async {
+    try {
+      final user = _firebaseAuth.currentUser;
+      if (user == null) {
+        throw ApiException('No user currently logged in');
+      }
+      if (name != null && name.isNotEmpty) {
+        await user.updateDisplayName(name);
+      }
+    } on FirebaseAuthException catch (e) {
+      throw _mapFirebaseAuthException(e);
+    } on Exception {
+      throw ApiException('Failed to update profile');
     }
   }
 
@@ -40,6 +74,10 @@ Exception mapFirebaseAuthException(FirebaseAuthException exception) {
   switch (exception.code) {
     case 'network-request-failed':
       return NetworkException('No internet connection');
+    case 'email-already-in-use':
+      return ApiException('The email address is already in use');
+    case 'weak-password':
+      return ApiException('The password provided is too weak');
     case 'user-not-found':
       return ApiException('No account found for this email');
     case 'wrong-password':
