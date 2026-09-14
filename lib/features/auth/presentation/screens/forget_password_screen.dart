@@ -22,7 +22,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   final TextEditingController _emailController = TextEditingController();
 
   late final ForgetPasswordViewModel _viewModel = ForgetPasswordViewModel(
-    AuthRepositoryImpl(AuthRemoteDataSourceImpl()),
+    AuthRepositoryImpl(AuthRemoteDataSource()),
   );
 
   @override

@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import '../../../../core/state/ui_state.dart';
-import '../../data/repositories/auth_repository_impl.dart';
+import '../../data/repositories/auth_repository.dart';
 
 class ForgetPasswordViewModel extends ChangeNotifier {
   final AuthRepository _authRepository;
@@ -18,7 +18,6 @@ class ForgetPasswordViewModel extends ChangeNotifier {
   Future<void> sendResetEmail(String rawEmail) async {
     final email = rawEmail.trim();
 
-    
     if (email.isEmpty) {
       _emitError('Please enter your email address.');
       return;
@@ -44,6 +43,7 @@ class ForgetPasswordViewModel extends ChangeNotifier {
     _state = UiState.error(message);
     notifyListeners();
   }
+
   void resetState() {
     _state = const UiState.initial();
     notifyListeners();
