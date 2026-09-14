@@ -15,4 +15,16 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<void> signInWithGoogle() {
     return _remoteDataSource.signInWithGoogle();
   }
+
+  @override
+  Future<void> register({required String name, required String email, required String password}) {
+    // TODO: implement register
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> updateProfile({String? name}) {
+    // TODO: implement updateProfile
+    throw UnimplementedError();
+  }
 }
