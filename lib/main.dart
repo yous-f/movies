@@ -6,7 +6,7 @@ import 'package:movies/features/auth/presentation/screens/forget_password_screen
 import 'package:movies/features/auth/presentation/screens/login_screen.dart';
 import 'package:movies/features/auth/presentation/screens/register_screen.dart';
 import 'package:movies/features/home/presentation/screens/home_screen.dart';
-import 'package:movies/features/movie_details/presentation/screens/movie_details_screen.dart';
+import 'package:movies/features/home/presentation/screens/movie_details_screen.dart';
 import 'package:movies/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:movies/features/profile/presentation/screens/update_profile_screen.dart';
 
@@ -40,7 +40,11 @@ class MoviesApp extends StatelessWidget {
         UpdateProfileScreen.routeName: (_) => const UpdateProfileScreen(),
         ForgetPasswordScreen.routeName: (_) => const ForgetPasswordScreen(),
         HomeScreen.routeName: (_) => const HomeScreen(),
-        MovieDetailsScreen.routeName: (_) => const MovieDetailsScreen(),
+        MovieDetailsScreen.routeName: (context) {
+          final args = ModalRoute.of(context)?.settings.arguments;
+          final movieId = (args is int) ? args : 0;
+          return MovieDetailsScreen(movieId: movieId);
+        },
       },
 
       initialRoute: HomeScreen.routeName,
