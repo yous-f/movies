@@ -41,7 +41,8 @@ class MoviesApp extends StatelessWidget {
         ForgetPasswordScreen.routeName: (_) => const ForgetPasswordScreen(),
         HomeScreen.routeName: (_) => const HomeScreen(),
         MovieDetailsScreen.routeName: (context) {
-          final movieId = ModalRoute.of(context)!.settings.arguments as int;
+          final args = ModalRoute.of(context)?.settings.arguments;
+          final movieId = (args is int) ? args : 0;
           return MovieDetailsScreen(movieId: movieId);
         },
       },

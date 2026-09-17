@@ -30,6 +30,19 @@ class _FakeAuthRepository implements AuthRepository {
       throw googleError!;
     }
   }
+
+  @override
+  Future<void> register({
+    required String name,
+    required String email,
+    required String password,
+  }) async {}
+
+  @override
+  Future<void> sendPasswordResetEmail(String email) async {}
+
+  @override
+  Future<void> updateProfile({String? name}) async {}
 }
 
 void main() {

@@ -1,37 +1,59 @@
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import 'package:movies/core/errors/network_exception.dart';
 import 'package:movies/core/errors/server_exception.dart';
 
 class ApiClient {
   static const String baseUrl = 'https://movies-api.accel.li/api/v2/';
 
-  final http.Client _client;
+  final Dio _dio;
 
-  ApiClient({http.Client? client}) : _client = client ?? http.Client();
+  ApiClient({Dio? dio})
+    : _dio =
+          dio ??
+          Dio(
+            BaseOptions(
+              baseUrl: baseUrl,
+              responseType: ResponseType.json,
+            ),
+          );
 
   Future<dynamic> get(
     String endpoint, {
     Map<String, String>? queryParameters,
   }) async {
-    final uri = Uri.parse(
-      '$baseUrl$endpoint',
-    ).replace(queryParameters: queryParameters);
-
     try {
-      final response = await _client.get(uri);
+      final response = await _dio.get<dynamic>(
+        endpoint,
+        queryParameters: queryParameters,
+      );
 
-      if (response.statusCode >= 200 && response.statusCode < 300) {
-        return jsonDecode(response.body);
+      final statusCode = response.statusCode ?? 0;
+      if (statusCode >= 200 && statusCode < 300) {
+        return response.data;
       }
 
-      throw ServerException(response.statusCode);
+      throw ServerException(statusCode);
+    } on DioException catch (error) {
+      if (_isNetworkFailure(error)) {
+        throw NetworkException('No internet connection');
+      }
+
+      final statusCode = error.response?.statusCode;
+      if (statusCode != null) {
+        throw ServerException(statusCode);
+      }
+
+      throw NetworkException('Network request failed');
     } on SocketException {
       throw NetworkException('No internet connection');
-    } on http.ClientException {
-      throw NetworkException('Network request failed');
     }
+  }
+
+  bool _isNetworkFailure(DioException error) {
+    return error.type == DioExceptionType.connectionError ||
+        error.type == DioExceptionType.connectionTimeout ||
+        error.error is SocketException;
   }
 }
