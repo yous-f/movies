@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 class InactiveNavBarIcon extends StatelessWidget {
   final String iconName;
 
-  const InactiveNavBarIcon({required this.iconName});
+  const InactiveNavBarIcon({super.key, required this.iconName});
 
   @override
   Widget build(BuildContext context) {
