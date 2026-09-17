@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:movies/core/constants/app_assets.dart';
-import 'package:movies/core/theme/app_colors.dart';
-import 'package:movies/shared/widgets/movie_card.dart';
+import 'package:movies/features/data/data_sources/move_remote_data_source.dart';
 import 'package:movies/core/state/ui_state.dart';
+import 'package:movies/core/theme/app_colors.dart';
+import 'package:movies/features/home/presentation/screens/movie_details_screen.dart';
+import 'package:movies/shared/widgets/movie_card.dart';
+
 import '../../../../core/network/api_client.dart';
-import '../../../data/data_sources/move_remote_data_source.dart';
 import '../../../data/repositories/movie_repository.dart';
 import '../view_models.dart';
-
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -28,8 +29,8 @@ class _HomeTabState extends State<HomeTab> {
     pageController = PageController(viewportFraction: 0.45, initialPage: 1);
 
     viewModel = HomeViewModel(
-      movieRepository: MovieRepository(
-        remoteDataSource: MovieRemoteDataSource(
+      movieRepository: MovieRepositoryImpl(
+        remoteDataSource: MovieRemoteDataSourceImpl(
           apiClient: ApiClient(),
         ),
       ),
@@ -42,6 +43,15 @@ class _HomeTabState extends State<HomeTab> {
   void dispose() {
     pageController.dispose();
     super.dispose();
+  }
+
+  void _navigateToDetails(int movieId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MovieDetailsScreen(movieId:  movieId),
+      ),
+    );
   }
 
   @override
@@ -96,11 +106,14 @@ class _HomeTabState extends State<HomeTab> {
                         return AnimatedScale(
                           scale: currentIndex == index ? 1.0 : 0.78,
                           duration: const Duration(milliseconds: 200),
-                          child: MovieCard(
-                            imageUrl: movie.largeCoverImage.isNotEmpty
-                                ? movie.largeCoverImage
-                                : 'assets/images/card.png',
-                            rating: movie.rating,
+                          child: GestureDetector(
+                            onTap: () => _navigateToDetails(movie.id),
+                            child: MovieCard(
+                              imageUrl: movie.largeCoverImage.isNotEmpty
+                                  ? movie.largeCoverImage
+                                  : 'assets/images/card.png',
+                              rating: movie.rating,
+                            ),
                           ),
                         );
                       },
@@ -126,10 +139,15 @@ class _HomeTabState extends State<HomeTab> {
                       children: [
                         Text('Action', style: textTheme.titleLarge),
                         const Spacer(),
-                        Text(
-                          'See More',
-                          style: textTheme.titleLarge?.copyWith(
-                            color: AppColors.primary,
+                        GestureDetector(
+                          onTap: () {
+                            
+                          },
+                          child: Text(
+                            'See More',
+                            style: textTheme.titleLarge?.copyWith(
+                              color: AppColors.primary,
+                            ),
                           ),
                         ),
                         const SizedBox(width: 4),
@@ -153,11 +171,14 @@ class _HomeTabState extends State<HomeTab> {
 
                         return SizedBox(
                           width: screenSize.width * 0.35,
-                          child: MovieCard(
-                            imageUrl: movie.mediumCoverImage.isNotEmpty
-                                ? movie.mediumCoverImage
-                                : 'assets/images/card.png',
-                            rating: movie.rating,
+                          child: GestureDetector(
+                            onTap: () => _navigateToDetails(movie.id),
+                            child: MovieCard(
+                              imageUrl: movie.mediumCoverImage.isNotEmpty
+                                  ? movie.mediumCoverImage
+                                  : 'assets/images/card.png',
+                              rating: movie.rating,
+                            ),
                           ),
                         );
                       },
@@ -169,7 +190,6 @@ class _HomeTabState extends State<HomeTab> {
             );
 
           case UiStateStatus.initial:
-          default:
             return const SizedBox.shrink();
         }
       },

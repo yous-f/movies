@@ -17,9 +17,8 @@ class UiState<T> {
       data = null,
       errorMessage = null;
 
-  const UiState.success(T data)
+  const UiState.success(this.data)
     : status = UiStateStatus.success,
-      data = data,
       errorMessage = null;
 
   const UiState.empty()
