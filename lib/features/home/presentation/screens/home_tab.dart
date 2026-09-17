@@ -169,7 +169,6 @@ class _HomeTabState extends State<HomeTab> {
             );
 
           case UiStateStatus.initial:
-          default:
             return const SizedBox.shrink();
         }
       },
