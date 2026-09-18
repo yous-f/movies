@@ -17,6 +17,11 @@ import 'package:movies/features/profile/presentation/widgets/profile_header.dart
 import 'package:movies/features/profile/presentation/widgets/profile_tabs.dart';
 import '../view_models/profile_view_model.dart';
 
+import '../../data/data_sources/profile_remote_data_source.dart';
+import '../../data/models/library_movie_model.dart';
+import '../../data/repositories/profile_repository.dart';
+import '../view_models/profile_view_model.dart';
+
 class ProfileTab extends StatefulWidget {
   const ProfileTab({super.key});
 
