@@ -13,6 +13,7 @@ import 'package:movies/features/auth/presentation/screens/register_screen.dart';
 import 'package:movies/features/home/presentation/screens/home_screen.dart';
 import 'package:movies/features/home/presentation/screens/movie_details_screen.dart';
 import 'package:movies/features/onboarding/presentation/screens/onboarding_screen.dart';
+
 import 'package:movies/features/profile/presentation/screens/update_profile_screen.dart';
 import 'firebase_options.dart';
 
@@ -58,6 +59,9 @@ class MoviesApp extends StatelessWidget {
         },
 
       initialRoute: OnboardingScreen.routeName,
-    );
+    ));
+      
+
+
   }
 }

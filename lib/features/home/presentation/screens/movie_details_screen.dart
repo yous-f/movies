@@ -1,7 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:movies/features/data/data_sources/move_remote_data_source.dart';
 import 'package:movies/features/data/repositories/movie_repository.dart';
 import 'package:movies/features/home/presentation/movie_details_view_model.dart';
+import 'package:movies/features/profile/data/data_sources/profile_remote_data_source.dart';
+import 'package:movies/features/profile/data/repositories/profile_repository.dart';
 import '../../../../core/network/api_client.dart';
 import '../../../../core/state/ui_state.dart';
 
@@ -9,8 +13,7 @@ class MovieDetailsScreen extends StatefulWidget {
   final int movieId;
   static const String routeName = "/details-screen";
 
-  const MovieDetailsScreen({super.key,  required this.movieId});
-  // MovieDetailsScreen(this.movieId);
+  const MovieDetailsScreen({super.key, required this.movieId});
 
   @override
   State<MovieDetailsScreen> createState() => _MovieDetailsScreenState();
@@ -25,6 +28,12 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
     viewModel = MovieDetailsViewModel(
       movieRepository: MovieRepositoryImpl(
         remoteDataSource: MovieRemoteDataSourceImpl(apiClient: ApiClient()),
+      ),
+      profileRepository: ProfileRepository(
+        remoteDataSource: ProfileRemoteDataSource(
+          firestore: FirebaseFirestore.instance,
+          auth: FirebaseAuth.instance,
+        ),
       ),
     );
     viewModel.fetchMovieDetailsAndSuggestions(widget.movieId);
@@ -94,7 +103,16 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                             Icons.play_circle_fill,
                             color: Color(0xFFF6BD00),
                           ),
-                          onPressed: () {},
+                          onPressed: () async {
+                            await viewModel.watchMovie(movie);
+                            if (!context.mounted) return;
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Added to History & Watchlist!'),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                          },
                         ),
                         // Top Action Icons
                         Positioned(
@@ -106,7 +124,16 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                               color: Colors.white,
                               size: 28,
                             ),
-                            onPressed: () {},
+                            onPressed: () async {
+                              await viewModel.watchMovie(movie);
+                              if (!context.mounted) return;
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Saved to Watchlist!'),
+                                  backgroundColor: Colors.green,
+                                ),
+                              );
+                            },
                           ),
                         ),
                         // Title & Year
@@ -153,7 +180,16 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () async {
+                            await viewModel.watchMovie(movie);
+                            if (!context.mounted) return;
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Added to Watchlist & History!'),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                          },
                           child: const Text(
                             'Watch',
                             style: TextStyle(
@@ -176,7 +212,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                           _buildStatBadge(
                             icon: Icons.favorite,
                             iconColor: const Color(0xFFF6BD00),
-                            value: '${movie.likeCount?? 0}',
+                            value: '${movie.likeCount ?? 0}',
                           ),
                           _buildStatBadge(
                             icon: Icons.access_time_filled,

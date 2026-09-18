@@ -6,12 +6,16 @@ import 'package:movies/core/state/ui_state.dart';
 import 'package:movies/core/theme/app_colors.dart';
 
 import 'package:movies/features/auth/presentation/screens/login_screen.dart';
+import 'package:movies/features/profile/data/data_sources/profile_remote_data_source.dart';
+import 'package:movies/features/profile/data/models/library_movie_model.dart';
+import 'package:movies/features/profile/data/repositories/profile_repository.dart';
 import 'package:movies/features/profile/presentation/screens/update_profile_screen.dart';
 import 'package:movies/features/profile/presentation/widgets/empty_watchlist.dart';
 import 'package:movies/features/profile/presentation/widgets/movie_grid.dart';
 import 'package:movies/features/profile/presentation/widgets/profile_action_buttons.dart';
 import 'package:movies/features/profile/presentation/widgets/profile_header.dart';
 import 'package:movies/features/profile/presentation/widgets/profile_tabs.dart';
+import '../view_models/profile_view_model.dart';
 
 import '../../data/data_sources/profile_remote_data_source.dart';
 import '../../data/models/library_movie_model.dart';
@@ -43,6 +47,12 @@ class _ProfileTabState extends State<ProfileTab> {
       ),
     );
 
+    _viewModel.loadProfileData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     _viewModel.loadProfileData();
   }
 
@@ -82,7 +92,6 @@ class _ProfileTabState extends State<ProfileTab> {
             ],
           ),
         );
-
       case UiStateStatus.empty:
         return const EmptyWatchlist();
 

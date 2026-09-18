@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies/features/data/models/movie_model.dart';
-import 'package:movies/features/movie_details/presentation/screens/movie_details_screen.dart';
+import 'package:movies/features/home/presentation/screens/movie_details_screen.dart';
 import 'package:movies/shared/widgets/movie_card.dart';
 
 class BrowseMovieGrid extends StatelessWidget {
