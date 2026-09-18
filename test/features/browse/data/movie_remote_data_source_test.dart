@@ -5,8 +5,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:movies/core/errors/server_exception.dart';
 import 'package:movies/core/network/api_client.dart';
-import 'package:movies/features/data/data_sources/move_remote_data_source.dart';
 import 'package:movies/features/data/models/movie_model.dart';
+
+// Abstract interface
+import 'package:movies/features/data/data_sources/move_remote_data_source.dart';
+
+// TODO: Ensure this import points to your concrete implementation file
+// import 'package:movies/features/data/data_sources/move_remote_data_source_impl.dart';
 
 class _JsonAdapter implements HttpClientAdapter {
   _JsonAdapter(this.statusCode, this.body);
@@ -19,10 +24,10 @@ class _JsonAdapter implements HttpClientAdapter {
 
   @override
   Future<ResponseBody> fetch(
-    RequestOptions options,
-    Stream<Uint8List>? requestStream,
-    Future<void>? cancelFuture,
-  ) async {
+      RequestOptions options,
+      Stream<Uint8List>? requestStream,
+      Future<void>? cancelFuture,
+      ) async {
     return ResponseBody.fromString(
       body,
       statusCode,
@@ -33,10 +38,13 @@ class _JsonAdapter implements HttpClientAdapter {
   }
 }
 
+// Return the abstract type, but instantiate the Impl
 MovieRemoteDataSource _dataSource(int statusCode, Object body) {
   final dio = Dio(BaseOptions(baseUrl: ApiClient.baseUrl));
   dio.httpClientAdapter = _JsonAdapter(statusCode, jsonEncode(body));
-  return MovieRemoteDataSource(apiClient: ApiClient(dio: dio));
+
+  // Use MovieRemoteDataSourceImpl here
+  return MovieRemoteDataSourceImpl(apiClient: ApiClient(dio: dio));
 }
 
 void main() {
