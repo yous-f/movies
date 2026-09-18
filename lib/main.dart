@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:movies/core/network/api_client.dart';
+import 'package:movies/features/data/data_sources/move_remote_data_source.dart';
+import 'package:movies/features/data/repositories/movie_repository.dart';
 
 import 'package:movies/core/theme/app_theme.dart';
 import 'package:movies/features/auth/presentation/screens/forget_password_screen.dart';
@@ -27,27 +32,34 @@ class MoviesApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
+    return RepositoryProvider<MovieRepository>(
+      create: (context) => MovieRepositoryImpl(
+        remoteDataSource: MovieRemoteDataSourceImpl(
+          apiClient: ApiClient(),
+        ),
+      ),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
 
-      theme: AppTheme.darkTheme,
-      themeMode: ThemeMode.dark,
+        theme: AppTheme.darkTheme,
+        themeMode: ThemeMode.dark,
 
-      routes: {
-        OnboardingScreen.routeName: (_) => const OnboardingScreen(),
-        LoginScreen.routeName: (_) => const LoginScreen(),
-        RegisterScreen.routeName: (_) => const RegisterScreen(),
-        UpdateProfileScreen.routeName: (_) => const UpdateProfileScreen(),
-        ForgetPasswordScreen.routeName: (_) => const ForgetPasswordScreen(),
-        HomeScreen.routeName: (_) => const HomeScreen(),
-        MovieDetailsScreen.routeName: (context) {
-          final args = ModalRoute.of(context)?.settings.arguments;
-          final movieId = (args is int) ? args : 0;
-          return MovieDetailsScreen(movieId: movieId);
+        routes: {
+          OnboardingScreen.routeName: (_) => const OnboardingScreen(),
+          LoginScreen.routeName: (_) => const LoginScreen(),
+          RegisterScreen.routeName: (_) => const RegisterScreen(),
+          UpdateProfileScreen.routeName: (_) => const UpdateProfileScreen(),
+          ForgetPasswordScreen.routeName: (_) => const ForgetPasswordScreen(),
+          HomeScreen.routeName: (_) => const HomeScreen(),
+          MovieDetailsScreen.routeName: (context) {
+            final args = ModalRoute.of(context)?.settings.arguments;
+            final movieId = (args is int) ? args : 0;
+            return MovieDetailsScreen(movieId: movieId);
+          },
         },
-      },
 
-      initialRoute: HomeScreen.routeName,
+        initialRoute: HomeScreen.routeName,
+      ),
     );
   }
 }

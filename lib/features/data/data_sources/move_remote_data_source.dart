@@ -5,6 +5,9 @@ abstract class MovieRemoteDataSource {
   Future<List<MovieModel>> getMovies({int page = 1, int limit = 20});
   Future<MovieModel> getMovieDetails(int movieId);
   Future<List<MovieModel>> getMovieSuggestions(int movieId);
+
+  // NEW: Added to support the Search feature
+  Future<List<MovieModel>> searchMovies(String query);
 }
 
 class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
@@ -52,6 +55,25 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
       'movie_suggestions.json',
       queryParameters: {
         'movie_id': movieId.toString(),
+      },
+    );
+
+    if (response['data'] != null && response['data']['movies'] != null) {
+      final List<dynamic> moviesJson = response['data']['movies'];
+      return moviesJson.map((json) => MovieModel.fromJson(json)).toList();
+    } else {
+      return [];
+    }
+  }
+
+  // NEW: Implementation for the Search feature utilizing the 'query_term' parameter
+  @override
+  Future<List<MovieModel>> searchMovies(String query) async {
+    final response = await apiClient.get(
+      'list_movies.json',
+      queryParameters: {
+        'query_term': query,
+        'limit': '20',
       },
     );
 
