@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:movies/features/browse/presentation/screens/browse_tab.dart';
 import 'package:movies/features/home/presentation/screens/home_tab.dart';
@@ -7,6 +8,10 @@ import 'package:movies/features/search/presentation/screens/search_tab.dart';
 
 import 'package:movies/shared/widgets/active_nav_bar_icon.dart';
 import 'package:movies/shared/widgets/inactive_nav_bar_icon.dart';
+
+import 'package:movies/features/data/repositories/movie_repository.dart';
+
+import '../../../search/bloc/search_bloc.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = '/home';
@@ -20,15 +25,22 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int currentIndex = 0;
 
-  final List<Widget> tabs = const [
-    HomeTab(),
-    SearchTab(),
-    BrowseTab(),
-    ProfileTab(),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final List<Widget> tabs = [
+      const HomeTab(),
+
+      BlocProvider(
+        create: (context) => SearchBloc(
+          movieRepository: context.read<MovieRepository>(),
+        ),
+        child: const SearchTab(),
+      ),
+
+      const BrowseTab(),
+      const ProfileTab(),
+    ];
+
     return Scaffold(
       body: SafeArea(child: tabs[currentIndex]),
 
@@ -39,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
             currentIndex = index;
           });
         },
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: InactiveNavBarIcon(iconName: 'home'),
             activeIcon: ActiveNavBarIcon(iconName: 'home'),

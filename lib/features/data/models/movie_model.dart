@@ -7,7 +7,8 @@ class MovieModel {
   final List<String> genres;
   final String summary;
   final String mediumCoverImage;
-  final String largeCoverImage;
+  final String largeCoverImage; 
+  final double likeCount;
 
   MovieModel({
     required this.id,
@@ -19,6 +20,7 @@ class MovieModel {
     required this.summary,
     required this.mediumCoverImage,
     required this.largeCoverImage,
+    required this.likeCount,
   });
 
   factory MovieModel.fromJson(Map<String, dynamic> json) {
@@ -32,6 +34,7 @@ class MovieModel {
       summary: json['summary'] ?? '',
       mediumCoverImage: json['medium_cover_image'] ?? '',
       largeCoverImage: json['large_cover_image'] ?? '',
+      likeCount: (json['like-count'] as num?)?.toDouble() ?? 0.0,
     );
   }
 }

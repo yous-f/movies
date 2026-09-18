@@ -6,7 +6,7 @@ class MovieCard extends StatelessWidget {
   final String imageUrl;
   final double rating;
 
-  const MovieCard({required this.imageUrl, required this.rating});
+  const MovieCard({super.key, required this.imageUrl, required this.rating});
 
   @override
   Widget build(BuildContext context) {

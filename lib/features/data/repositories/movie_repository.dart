@@ -1,14 +1,37 @@
+import 'package:movies/features/data/data_sources/move_remote_data_source.dart';
 
-import '../data_sources/move_remote_data_source.dart';
 import '../models/movie_model.dart';
 
-class MovieRepository {
+abstract class MovieRepository {
+  Future<List<MovieModel>> getMovies({int page = 1, int limit = 20});
+  Future<MovieModel> getMovieDetails(int movieId);
+  Future<List<MovieModel>> getMovieSuggestions(int movieId);
+
+  Future<List<MovieModel>> searchMovies(String query);
+}
+
+class MovieRepositoryImpl implements MovieRepository {
   final MovieRemoteDataSource remoteDataSource;
 
-  MovieRepository({required this.remoteDataSource});
+  MovieRepositoryImpl({required this.remoteDataSource});
 
-  Future<List<MovieModel>> getMovies({int page = 1, int limit = 20}) async {
-    return await remoteDataSource.getMovies(page: page, limit: limit);
+  @override
+  Future<List<MovieModel>> getMovies({int page = 1, int limit = 20}) {
+    return remoteDataSource.getMovies(page: page, limit: limit);
   }
 
+  @override
+  Future<MovieModel> getMovieDetails(int movieId) {
+    return remoteDataSource.getMovieDetails(movieId);
+  }
+
+  @override
+  Future<List<MovieModel>> getMovieSuggestions(int movieId) {
+    return remoteDataSource.getMovieSuggestions(movieId);
+  }
+
+  @override
+  Future<List<MovieModel>> searchMovies(String query) {
+    return remoteDataSource.searchMovies(query);
+  }
 }
