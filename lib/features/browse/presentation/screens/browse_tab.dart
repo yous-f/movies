@@ -21,8 +21,10 @@ class BrowseTab extends StatelessWidget {
     return BlocProvider(
       create: (_) => BrowseBloc(
         movieRepository ??
-            MovieRepository(
-              remoteDataSource: MovieRemoteDataSource(apiClient: ApiClient()),
+            MovieRepositoryImpl(
+              remoteDataSource: MovieRemoteDataSourceImpl(
+                apiClient: ApiClient(),
+              ),
             ),
       )..add(const BrowseMoviesRequested()),
       child: const _BrowseView(),
