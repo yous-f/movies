@@ -6,6 +6,8 @@ abstract class MovieRepository {
   Future<List<MovieModel>> getMovies({int page = 1, int limit = 20});
   Future<MovieModel> getMovieDetails(int movieId);
   Future<List<MovieModel>> getMovieSuggestions(int movieId);
+
+  Future<List<MovieModel>> searchMovies(String query);
 }
 
 class MovieRepositoryImpl implements MovieRepository {
@@ -26,5 +28,10 @@ class MovieRepositoryImpl implements MovieRepository {
   @override
   Future<List<MovieModel>> getMovieSuggestions(int movieId) {
     return remoteDataSource.getMovieSuggestions(movieId);
+  }
+
+  @override
+  Future<List<MovieModel>> searchMovies(String query) {
+    return remoteDataSource.searchMovies(query);
   }
 }
